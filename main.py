@@ -2,48 +2,53 @@ import os
 from dotenv import load_dotenv
 from smolagents import (
     CodeAgent,
-    DuckDuckGoSearchTool,
     InferenceClientModel,
     FinalAnswerTool,
-    UserInputTool,
-    VisitWebpageTool,
+    LogLevel,
+    ToolCallingAgent,
 )
 import yaml
+import json
+
 
 load_dotenv()
 
+
 model = InferenceClientModel(
-    model_id="google/gemma-4-31B-it",
+    model_id="google/gemma-4-26B-A4B-it",
     token=os.getenv("HF_TOKEN"),
 )
 
 
-with open("prompts.yaml", "r") as stream:
-    prompt_templates = yaml.safe_load(stream)
+# with open("prompts.yaml", "r") as stream:
+#     prompt_templates = yaml.safe_load(stream)
 
-final_answer = FinalAnswerTool()
+# final_answer = FinalAnswerTool()
 
 
-agent = CodeAgent(
-    tools=[
-        DuckDuckGoSearchTool(),
-        UserInputTool(),
-        VisitWebpageTool(),
-        final_answer,
-    ],
-    # tools=[],
-    model=model,
-    prompt_templates=prompt_templates,
-)
+# agent = CodeAgent(
+#     # tools=[store_tool, get_tool],
+#     model=model,
+#     add_base_tools=True,
+#     prompt_templates=prompt_templates,
+#     verbosity_level=LogLevel.INFO,
+# )
+
+
+agent = ToolCallingAgent(add_base_tools=True, tools=[], model=model)
 
 
 def main():
     print("Hello from test-agents!")
     # print(os.getenv("HF_TOKEN"))
     result = agent.run(
-        "بلعم باعورا که بود؟ آیه دقیقی که در قرآن دربارش اومده رو هم بنویس"
+        """
+    who is the president of Iran during the war of hurmuz?    
+    """,
+        return_full_result=True,
     )
     print(result)
+    print(json.dumps(agent.visualize()))
 
 
 if __name__ == "__main__":
