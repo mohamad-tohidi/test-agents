@@ -22,7 +22,7 @@ from smolagents.models import OpenAIModel
 
 
 model = OpenAIModel(
-    model_id="gemma4:e2b",
+    model_id="gemma4:e2b-it-q4_K_M",
     api_base="http://localhost:11434/v1",
     api_key="ollama",
 )
@@ -131,8 +131,7 @@ def main():
     )
 
     # Define a task that will benefit from planning
-    task = """Search for recent developments in artificial intelligence and provide a summary
-    of the top 3 most significant breakthroughs in 2024. Include the source of each breakthrough."""
+    task = "موسسه همتا با نام هوش مصنوعی و تمدن اسلامی چیست؟ چه اعضایی دارد؟"
 
     try:
         print(f"\n📋 Task: {task}")
